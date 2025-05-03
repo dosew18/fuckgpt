@@ -19,15 +19,7 @@
   <div id="result"></div>
 
   <script>
-    const images = [
-      'https://via.placeholder.com/512x512.png?text=Gambar+1',
-      'https://via.placeholder.com/512x512.png?text=Gambar+2',
-      'https://via.placeholder.com/512x512.png?text=Gambar+3',
-      'https://via.placeholder.com/512x512.png?text=Gambar+4',
-      'https://via.placeholder.com/512x512.png?text=Gambar+5',
-    ];
-
-    function generateImage() {
+    async function generateImage() {
       const prompt = document.getElementById('promptInput').value;
       const resultDiv = document.getElementById('result');
       
@@ -36,8 +28,41 @@
         return;
       }
 
-      const randomIndex = Math.floor(Math.random() * images.length);
-      resultDiv.innerHTML = `<img src="${images[randomIndex]}" alt="Hasil Gambar AI" width="512"/>`;
+      // API key yang diberikan
+      const API_KEY = 'r8_ME6Fg34rHhIawtEJqjv0HtQSBI2WDOe1M638a';
+
+      // URL API yang digunakan
+      const url = 'https://api.replicate.com/v1/predictions';
+
+      const headers = {
+        'Authorization': `Token ${API_KEY}`,
+        'Content-Type': 'application/json'
+      };
+
+      const body = JSON.stringify({
+        version: "f56b3b3b3f33b3b3", // Ganti dengan versi model yang kamu pilih
+        input: { prompt: prompt },
+      });
+
+      try {
+        // Mengirim request ke API
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: headers,
+          body: body
+        });
+
+        const data = await response.json();
+        if (data && data.output) {
+          // Menampilkan gambar hasil API
+          const imageUrl = data.output[0];
+          resultDiv.innerHTML = `<img src="${imageUrl}" alt="Generated Image" />`;
+        } else {
+          resultDiv.innerHTML = 'Tidak ada gambar yang dihasilkan. Coba lagi.';
+        }
+      } catch (error) {
+        resultDiv.innerHTML = 'Terjadi kesalahan: ' + error.message;
+      }
     }
   </script>
 </body>
