@@ -1,23 +1,23 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Generator</title>
+    <title>AI Image Generator</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>Welcome to the Image Generator</h1>
-    </header>
-    <main>
-        <div id="generator-section">
-            <p>Click the button below to generate an image:</p>
-            <button id="generate-button">Generate Image</button>
+    <div class="container">
+        <h1>AI Image Generator</h1>
+        <input type="text" id="prompt-input" placeholder="Enter your image prompt here...">
+        <button onclick="randomPrompt()">Generate Random Prompt</button>
+        <button onclick="generateImage()">Generate Image</button>
+        <button onclick="savePromptToURL()">Share Prompt</button>
+        <div id="output-container">
+            <img id="output-image" src="" alt="" />
         </div>
-    </main>
-    <footer>
-        <p>Made with 💻 by ChatGPT</p>
-    </footer>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
