@@ -1,23 +1,44 @@
-
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Image Generator</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Image Generator</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; text-align: center; }
+    input { width: 80%; padding: 10px; font-size: 1rem; margin-bottom: 10px; }
+    button { padding: 10px 20px; font-size: 1rem; }
+    img { margin-top: 20px; max-width: 100%; height: auto; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>AI Image Generator</h1>
-        <input type="text" id="prompt-input" placeholder="Enter your image prompt here...">
-        <button onclick="randomPrompt()">Generate Random Prompt</button>
-        <button onclick="generateImage()">Generate Image</button>
-        <button onclick="savePromptToURL()">Share Prompt</button>
-        <div id="output-container">
-            <img id="output-image" src="" alt="" />
-        </div>
-    </div>
-    <script src="script.js"></script>
-</body>
+  <h1>AI Image Generator</h1>
+  <input type="text" id="promptInput" placeholder="Masukkan deskripsi gambar">
+  <br>
+  <button onclick="generateImage()">Generate</button>
+  <div id="result"></div>  <script>
+    async function generateImage() {
+      const prompt = document.getElementById('promptInput').value;
+      const resultDiv = document.getElementById('result');
+      resultDiv.innerHTML = 'Loading...';
+
+      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": "Bearer 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",
+          "Content-Type": "application/json",
+          "HTTP-Referer": "https://dosew18.github.io/tesgen/",
+          "X-Title": "Personal Generator"
+        },
+        body: JSON.stringify({
+          model: "stabilityai/sdxl",
+          messages: [{ role: "user", content: prompt }],
+          stream: false
+        })
+      });
+
+      const data = await response.json();
+      const output = data.choices?.[0]?.message?.content || "Gagal menghasilkan gambar.";
+      resultDiv.innerHTML = `<img src="${output}" alt="Hasil Gambar AI" width="512"/>`;
+    }
+  </script></body>
 </html>
